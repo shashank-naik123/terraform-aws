@@ -4,27 +4,11 @@ resource "aws_instance" "web" {
   key_name               = "dove-key"
   vpc_security_group_ids = [aws_security_group.dove-sg.id]
   availability_zone      = var.zone1
+  user_data              = file("web.sh")
 
   tags = {
     Name    = "Dove-Web-Server"
     Project = "Dove"
-  }
-
-  provisioner "file" {
-    source      = "web.sh"
-    destination = "/tmp/web.sh"
-  }
-  connection {
-    type        = "ssh"
-    user        = var.webuser
-    private_key = file("dovekey")
-    host        = self.public_ip
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /tmp/web.sh",
-      "/tmp/web.sh"
-    ]
   }
 
 }
