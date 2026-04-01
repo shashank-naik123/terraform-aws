@@ -8,6 +8,12 @@ variable "zone1" {
 
 }
 
+variable "webuser" {
+  default = "ubuntu"
+
+}
+
+
 variable "amiID" {
   type = map(any)
   default = {

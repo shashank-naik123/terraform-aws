@@ -9,9 +9,32 @@ resource "aws_instance" "web" {
     Name    = "Dove-Web-Server"
     Project = "Dove"
   }
+
+  provisioner "file" {
+    source      = "web.sh"
+    destination = "/tmp/web.sh"
+  }
+  connection {
+    type        = "ssh"
+    user        = var.webuser
+    private_key = file("dovekey")
+    host        = self.public_ip
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/web.sh",
+      "/tmp/web.sh"
+    ]
+  }
+
 }
 
 resource "aws_ec2_instance_state" "web_test" {
   instance_id = aws_instance.web.id
   state       = "running"
+}
+
+output "instance_public_ip" {
+  description = "Public IP of the web server instance"
+  value       = aws_instance.web.public_ip
 }
