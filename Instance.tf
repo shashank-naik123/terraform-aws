@@ -1,12 +1,12 @@
 resource "aws_instance" "web" {
-  ami           = data.aws_ami.amiID.id
-  instance_type = "t3.micro"
-  key_name      = "dove-key"
+  ami                    = var.amiID[var.region]
+  instance_type          = "t3.micro"
+  key_name               = "dove-key"
   vpc_security_group_ids = [aws_security_group.dove-sg.id]
-  availability_zone = var.zone1
+  availability_zone      = var.zone1
 
   tags = {
-    Name = "Dove-Web-Server"
+    Name    = "Dove-Web-Server"
     Project = "Dove"
   }
 }
